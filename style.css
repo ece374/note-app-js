@@ -1,0 +1,63 @@
+* {
+    font-size: 20px;
+}
+
+body {
+    background-color: rgb(220, 236, 221);
+}
+
+.btn {
+    background-color: blueviolet;
+    width: 4%;
+    cursor: pointer;
+    text-align: center;
+}
+
+#addTxt {
+    background-color: #fff;
+    display: inline-block;
+    padding: 30px 10px;
+}
+
+.buttons {
+    cursor: pointer;
+    border: none !important;
+    transition: all 0.5s ease;
+    color: white;
+    text-align: center;
+}
+
+.delete {
+    background-color: green;
+    border: none;
+}
+
+.delete:hover {
+    opacity: 0.5;
+}
+
+.edit {
+    background-color: rgb(121, 19, 216);
+    margin-left: 8px;
+}
+
+.edit:hover {
+    opacity: 0.4;
+}
+
+.lockbutton {
+    cursor: pointer;
+}
+
+.openlockbutton {
+    cursor: pointer;
+    display: none;
+}
+
+.card-body.active .openlockbutton {
+    display: inline;
+}
+
+.card-body.active .lockbutton {
+    display: none;
+}
