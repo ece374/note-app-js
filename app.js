@@ -2,7 +2,6 @@ const addBtn = document.getElementById("addBtn");
 const addTxt = document.getElementById("addTxt");
 const title = document.getElementById("addtitle");
 const container = document.querySelector(".container-fluid");
-const form = document.querySelector("form");
 
 
 const shownotes = (() => {
@@ -20,11 +19,12 @@ const shownotes = (() => {
     const noteList = arrays?.map((notlar, index) => {
 
         //  console.log(notlar.Lock)
-        if (notlar.Lock) {
-
+        if (notlar.Lock) {  //notlar.Lock=true ise
+         //buradaki card-body e activite eklediğimde notu kilitledikten sonra açık kilitli ıkonun kalmasını istediğim
+         //için sayfa yenilesem bile o icon kalıyor. ama ben bu activite eklemeseydım  sayfa yenilendiğinde  kapalı kilitli ıcon geri geliyordu. 
             return (`
             <div class="noteCard mx-2 card" style="width: 18rem;">
-                            <div class="card-body">
+                            <div class="card-body active">
                             <h5 class="card-title">${notlar.title}</h5> 
                             <div class="block" id="note"  style="display:none;">
                                 <p class="card-text">${notlar.text}</p>
@@ -37,11 +37,12 @@ const shownotes = (() => {
                 </div>
             `
             )
-        } 
-        else {
+        }
+        else {//notlar.Lock=false ise
+            //burdaki card-body sınıfına activite sınıfını eklersem bütün kilitleri açık kilit yapar.
             return (`
             <div class="noteCard mx-2 card" style="width: 18rem;">
-                            <div class="card-body">
+                            <div class="card-body ">
                             <h5 class="card-title">${notlar.title}</h5> 
                             <div class="block" id="note">
                                 <p class="card-text">${notlar.text}</p>
@@ -49,7 +50,7 @@ const shownotes = (() => {
                                 <button id="${index}" class="edit buttons" onclick="EditNote(this)">Edit Note</button> 
                             </div>
                             <i class="fa fa-lock lockbutton" id=" ${index}" onclick="closeLock(this)" > </i>
-                            <i class="fa fa-unlock-alt openlockbutton" aria-hidden="true" id=" ${index}" onclick="openLock(this)"></i>
+                            <i class="fa fa-unlock-alt openlockbutton" aria-hidden="true" id=" ${index}" onclick="openLock(this)" ></i>
                             </div>
                 </div>
             `
@@ -66,6 +67,7 @@ const shownotes = (() => {
         //'<h3 style="color:red">boş</h3>'
     }
 })
+let takeps;
 
 const closeLock = (e) => {
 
@@ -74,6 +76,7 @@ const closeLock = (e) => {
     while (notes) {
         if (confirm("are you sure")) {
             alert("notunuz kitlendi")
+            takeps = prompt("şifre belirleyiniz");
             e.closest('.card-body').classList.add('active'); //ıkonları çevreleyen div//bir koşula bağlı olduğu için buraya yazdık.ıkonu değiştirir.
 
             arrays = JSON.parse(notes)
@@ -81,20 +84,18 @@ const closeLock = (e) => {
             localStorage.setItem('notlarım', JSON.stringify(
                 arrays.map((el, x) => {
                     return x === parseInt(e.id) ? { ...el, Lock: true } : el  //el={title: '1', text: 'lşret', Lock: true} arraydeki butun boyle objectleri yazdırır.
+                   
                 })
             ))
-          
             return divBlock.style.display = "none";
-            
+       
         }
-        
         else {
             alert("notunuzu kitlemeye izin vermediniz")
             return divBlock.style.display = "block"
         }
     }
     // localStorage.setItem('notlarım', JSON.stringify(arrays))
-
     shownotes()
 }
 
@@ -108,20 +109,23 @@ e.closest('.card-body').classList.add('active'); bu satırı bir fonksiyon açı
 const openLock = (e) => {
     const divBlock = e.parentElement.children[1]
     let notes = localStorage.getItem("notlarım")
-
+   
     if (notes) {
-        e.closest('.card-body').classList.remove('active'); //kilit açma ıkonuna bastığında bu ıkonu getirdiğimiz sınıf pasif kalırsa , eski kilit kalır.
+        let password = prompt("Please enter your password");
+        if (password == takeps) {
+            e.closest('.card-body').classList.remove('active'); //kilit açma ıkonuna bastığında bu ıkonu getirdiğimiz sınıf pasif kalırsa , eski kilit kalır.
+            arrays = JSON.parse(notes)
+    
+            localStorage.setItem('notlarım', JSON.stringify(
+                arrays.map((el, x) => {
+                    return x === parseInt(e.id) ? { ...el, Lock: false } : el  //el={title: '1', text: 'lşret', Lock: true} arraydeki butun boyle objectleri yazdırır.
+                })
+            ))
+            return divBlock.style.display = "block";
+        }
 
-        arrays = JSON.parse(notes)
-        // arrays.Lock = !arrays.Lock;
-        localStorage.setItem('notlarım', JSON.stringify(
-            arrays.map((el, x) => {
-                return x === parseInt(e.id) ? { ...el, Lock: false } : el  //el={title: '1', text: 'lşret', Lock: true} arraydeki butun boyle objectleri yazdırır.
-            })
-        ))
-
-        return divBlock.style.display = "block";
     }
+
 
     shownotes()
 }
