@@ -76,7 +76,7 @@ const closeLock = (e) => {
     while (notes) {
         if (confirm("are you sure")) {
             alert("notunuz kitlendi")
-            takeps = prompt("şifre belirleyiniz");
+            takeps = prompt("please create your password");
             e.closest('.card-body').classList.add('active'); //ıkonları çevreleyen div//bir koşula bağlı olduğu için buraya yazdık.ıkonu değiştirir.
 
             arrays = JSON.parse(notes)
@@ -122,6 +122,10 @@ const openLock = (e) => {
                 })
             ))
             return divBlock.style.display = "block";
+        }
+        else{
+
+            alert("you entered false the your password")
         }
 
     }
